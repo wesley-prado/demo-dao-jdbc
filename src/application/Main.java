@@ -17,7 +17,7 @@ public class Main {
 					"wesleyprado.dev@codemages.com",
 					sdf.parse( "01/07/1995" ),
 					10230.0,
-					new Department(1, "Software Engineering")
+					new Department( 1, "Software Engineering" )
 			) );
 		} catch (ParseException e) {
 			e.printStackTrace();

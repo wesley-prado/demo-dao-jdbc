@@ -40,48 +40,54 @@ public class Seller implements Serializable {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public Seller setId(Integer id) {
 		this.id = id;
+		return this;
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public void setName(String name) {
+	public Seller setName(String name) {
 		this.name = name;
+		return this;
 	}
 
 	public String getEmail() {
 		return email;
 	}
 
-	public void setEmail(String email) {
+	public Seller setEmail(String email) {
 		this.email = email;
+		return this;
 	}
 
 	public Date getBirthDate() {
 		return birthDate;
 	}
 
-	public void setBirthDate(Date birthDate) {
+	public Seller setBirthDate(Date birthDate) {
 		this.birthDate = birthDate;
+		return this;
 	}
 
 	public double getBaseSalary() {
 		return baseSalary;
 	}
 
-	public void setBaseSalary(double baseSalary) {
+	public Seller setBaseSalary(double baseSalary) {
 		this.baseSalary = baseSalary;
+		return this;
 	}
 
 	public Department getDepartment() {
 		return department;
 	}
 
-	public void setDepartment(Department department) {
+	public Seller setDepartment(Department department) {
 		this.department = department;
+		return this;
 	}
 
 	@Override

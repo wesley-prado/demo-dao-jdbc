@@ -14,6 +14,6 @@ public class DaoFactory {
 
 	@Contract(value = " -> new")
 	public static @NotNull DepartmentDao createDepartmentDao() {
-		return new DepartmentDaoJDBC();
+		return new DepartmentDaoJDBC( DB.getConnection() );
 	}
 }

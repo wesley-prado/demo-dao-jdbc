@@ -4,11 +4,13 @@ import model.dao.DaoFactory;
 import model.dao.SellerDao;
 import model.entities.Seller;
 
+import java.util.List;
+
 public class Main {
 	public static void main(String[] args) {
 		SellerDao sellerDao = DaoFactory.createSellerDao();
-		Seller seller = sellerDao.findById( 3 );
+		List<Seller> sellers = sellerDao.findByDepartmentId( 2 );
 
-		System.out.println(seller);
+		System.out.print( sellers );
 	}
 }

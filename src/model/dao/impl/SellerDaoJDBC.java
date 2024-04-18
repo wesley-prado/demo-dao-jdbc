@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SellerDaoJDBC implements SellerDao {
-	private Connection conn;
+	private final Connection conn;
 
 	public SellerDaoJDBC(Connection conn) {
 		this.conn = conn;
@@ -41,18 +41,17 @@ public class SellerDaoJDBC implements SellerDao {
 		ResultSet rs = null;
 
 		try {
-			String query = "SELECT seller.*, dep.Name as DepName FROM seller "
-					+ "INNER JOIN Department as dep ON seller.departmentId = dep.Id "
-					+ "WHERE seller.Id = ?";
+			String query = "SELECT seller.*, dep.Name as DepName FROM seller " +
+					"INNER JOIN Department as dep ON seller.departmentId = dep.Id " +
+					"WHERE seller.Id = ?";
+
 			st = this.conn.prepareStatement( query );
 			st.setInt( 1, id );
 			rs = st.executeQuery();
 
 			if ( rs.next() ) {
 				Department dep = instantiateDepartment( rs );
-				Seller seller = instantiateSeller( rs, dep );
-
-				return seller;
+				return instantiateSeller( rs, dep );
 			}
 		} catch (SQLException e) {
 			throw new DbException( e.getMessage() );
@@ -71,10 +70,10 @@ public class SellerDaoJDBC implements SellerDao {
 		ResultSet rs = null;
 
 		try {
-			String query = "SELECT seller.*, dep.Name as DepName\n" +
-					"FROM seller\n" +
-					"INNER JOIN department as dep\n" +
-					"ON seller.departmentId = dep.Id\n" +
+			String query = "SELECT seller.*, dep.Name as DepName " +
+					"FROM seller " +
+					"INNER JOIN department as dep " +
+					"ON seller.departmentId = dep.Id " +
 					"ORDER BY seller.Name";
 
 			pst = this.conn.prepareStatement( query );
@@ -89,6 +88,9 @@ public class SellerDaoJDBC implements SellerDao {
 			}
 		} catch (SQLException e) {
 			throw new DbException( e.getMessage() );
+		} finally {
+			DB.closePreparedStatement( pst );
+			DB.closeResultSet( rs );
 		}
 
 		return sellers;
@@ -131,22 +133,18 @@ public class SellerDaoJDBC implements SellerDao {
 	}
 
 	private Department instantiateDepartment(ResultSet rs) throws SQLException {
-		Department dep = new Department()
+		return new Department()
 				.setId( rs.getInt( "DepartmentId" ) )
 				.setName( rs.getString( "DepName" ) );
-
-		return dep;
 	}
 
 	private Seller instantiateSeller(ResultSet rs, Department dep) throws SQLException {
-		Seller seller = new Seller()
+		return new Seller()
 				.setId( rs.getInt( "Id" ) )
 				.setName( rs.getString( "Name" ) )
 				.setEmail( rs.getString( "Email" ) )
 				.setBaseSalary( rs.getDouble( "BaseSalary" ) )
 				.setBirthDate( rs.getDate( "BirthDate" ) )
 				.setDepartment( dep );
-
-		return seller;
 	}
 }

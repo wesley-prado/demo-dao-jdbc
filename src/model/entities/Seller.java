@@ -112,6 +112,6 @@ public class Seller implements Serializable {
 				", birthDate=" + birthDate +
 				", baseSalary=" + baseSalary +
 				", department=" + department +
-				'}';
+				"}\n";
 	}
 }

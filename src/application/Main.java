@@ -9,7 +9,7 @@ import java.util.List;
 public class Main {
 	public static void main(String[] args) {
 		SellerDao sellerDao = DaoFactory.createSellerDao();
-		List<Seller> sellers = sellerDao.findByDepartmentId( 2 );
+		List<Seller> sellers = sellerDao.findAll();
 
 		System.out.print( sellers );
 	}

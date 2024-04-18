@@ -20,8 +20,8 @@ public class Main {
 	System.out.print( sellers );
 
 	try {
-	  sellerDao.insert( Seller.newSeller(
-			  null,
+	  sellerDao.update( Seller.newSeller(
+			  13,
 			  "Beatriz Avelino",
 			  "anymail@gmail.com",
 			  Date.from( sdt.parse( "03/02/2001" ).toInstant() ),

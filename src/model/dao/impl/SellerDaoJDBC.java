@@ -49,7 +49,34 @@ public class SellerDaoJDBC implements SellerDao {
 
   @Override
   public void update(Seller obj) {
+	PreparedStatement pst = null;
 
+	try {
+	  String query = "UPDATE seller "
+			  + "SET Name = ?, Email = ?, BirthDate = ?, BaseSalary = ?, DepartmentId = ? "
+			  + "WHERE Id = ?";
+
+	  pst = this.conn.prepareStatement( query );
+
+	  int fieldPos = 0;
+	  pst.setString( ++fieldPos, obj.getName() );
+	  pst.setString( ++fieldPos, obj.getEmail() );
+	  pst.setDate(
+			  ++fieldPos,
+			  Date.valueOf( obj.getBirthDate().toInstant()
+					  .atZone( ZoneId.systemDefault() )
+					  .toLocalDate() )
+	  );
+	  pst.setDouble( ++fieldPos, obj.getBaseSalary() );
+	  pst.setInt( ++fieldPos, obj.getDepartment().getId() );
+	  pst.setInt( ++fieldPos, obj.getId() );
+
+	  pst.executeUpdate();
+	} catch (SQLException e) {
+	  throw new DbException( e.getMessage() );
+	} finally {
+	  DB.closePreparedStatement( pst );
+	}
   }
 
   @Override

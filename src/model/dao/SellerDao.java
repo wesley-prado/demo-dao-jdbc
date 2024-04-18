@@ -13,7 +13,10 @@ public interface SellerDao {
 
   Seller findById(Integer id);
 
+  Seller findByEmail(String email);
+
   List<Seller> findAll();
 
   List<Seller> findByDepartmentId(Integer id);
+
 }

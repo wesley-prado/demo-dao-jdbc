@@ -20,14 +20,19 @@ public class Main {
 	System.out.print( sellers );
 
 	try {
-	  sellerDao.update( Seller.newSeller(
+	  sellerDao.insert( Seller.newSeller(
 			  13,
-			  "Beatriz Avelino",
-			  "anymail@gmail.com",
+			  "Wrongful insert",
+			  "wrongful_email@gmail.com",
 			  Date.from( sdt.parse( "03/02/2001" ).toInstant() ),
 			  6500.0,
 			  new Department().setId( 5 )
 	  ) );
+
+	  Seller wrongfulSeller = sellerDao.findByEmail( "wrongful_email@gmail.com" );
+	  System.out.println( wrongfulSeller );
+
+	  sellerDao.deleteById( wrongfulSeller.getId() );
 	} catch (ParseException e) {
 	  e.printStackTrace();
 	}

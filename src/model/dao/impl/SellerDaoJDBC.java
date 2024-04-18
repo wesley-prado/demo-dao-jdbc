@@ -81,7 +81,21 @@ public class SellerDaoJDBC implements SellerDao {
 
   @Override
   public void deleteById(Integer id) {
+	PreparedStatement pst = null;
 
+	try {
+	  String query = "DELETE FROM seller WHERE Id = ?";
+
+	  pst = this.conn.prepareStatement( query );
+
+	  pst.setInt( 1, id );
+
+	  pst.executeUpdate();
+	} catch (SQLException e) {
+	  throw new DbException( e.getMessage() );
+	} finally {
+	  DB.closePreparedStatement( pst );
+	}
   }
 
   @Override
@@ -113,7 +127,35 @@ public class SellerDaoJDBC implements SellerDao {
   }
 
   @Override
-  public List<Seller> findAll() {
+  public Seller findByEmail(String email) throws DbException {
+	PreparedStatement st = null;
+	ResultSet rs = null;
+
+	try {
+	  String query =
+			  "SELECT seller.*, dep.Name as DepName FROM seller " + "INNER JOIN Department" + " " +
+					  "as dep ON seller.departmentId = dep.Id " + "WHERE seller.Email = ?";
+
+	  st = this.conn.prepareStatement( query );
+	  st.setString( 1, email );
+	  rs = st.executeQuery();
+
+	  if ( rs.next() ) {
+		Department dep = instantiateDepartment( rs );
+		return instantiateSeller( rs, dep );
+	  }
+	} catch (SQLException e) {
+	  throw new DbException( e.getMessage() );
+	} finally {
+	  DB.closePreparedStatement( st );
+	  DB.closeResultSet( rs );
+	}
+
+	return null;
+  }
+
+  @Override
+  public List<Seller> findAll() throws DbException {
 	List<Seller> sellers = new ArrayList<>();
 	PreparedStatement pst = null;
 	ResultSet rs = null;

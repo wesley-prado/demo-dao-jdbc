@@ -7,6 +7,6 @@ public class Main2 {
   public static void main(String[] args) {
 	DepartmentDao departmentDao = DaoFactory.createDepartmentDao();
 
-	System.out.println( departmentDao.findById( 5 ) );
+	System.out.println( departmentDao.findAll() );
   }
 }

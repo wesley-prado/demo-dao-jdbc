@@ -16,7 +16,7 @@ public class DepartmentDaoJDBC implements DepartmentDao {
   }
 
   @Override
-  public void insert(Department obj) {
+  public void insert(Department obj) throws DbException {
 	PreparedStatement pst = null;
 	ResultSet rs = null;
 
@@ -46,22 +46,37 @@ public class DepartmentDaoJDBC implements DepartmentDao {
   }
 
   @Override
-  public void update(Department obj) {
+  public void update(Department obj) throws DbException {
+	PreparedStatement pst = null;
+
+	try {
+	  String query = "UPDATE department SET Name = ? WHERE Id = ?";
+
+	  pst = this.conn.prepareStatement( query );
+
+	  pst.setString( 1, obj.getName() );
+	  pst.setInt( 2, obj.getId() );
+
+	  pst.executeUpdate();
+	} catch (SQLException e) {
+	  throw new DbException( e.getMessage() );
+	} finally {
+	  DB.closePreparedStatement( pst );
+	}
+  }
+
+  @Override
+  public void deleteById(Integer id) throws DbException {
 
   }
 
   @Override
-  public void deleteById(Integer id) {
-
-  }
-
-  @Override
-  public Department findById(Integer id) {
+  public Department findById(Integer id) throws DbException {
 	return null;
   }
 
   @Override
-  public List<Department> findAll() {
+  public List<Department> findAll() throws DbException {
 	return null;
   }
 }

@@ -20,16 +20,16 @@ public class Main {
 	System.out.print( sellers );
 
 	try {
-	  sellerDao.insert( Seller.newSeller(
+	  Seller wrongfulSeller = Seller.newSeller(
 			  13,
 			  "Wrongful insert",
 			  "wrongful_email@gmail.com",
 			  Date.from( sdt.parse( "03/02/2001" ).toInstant() ),
 			  6500.0,
 			  new Department().setId( 5 )
-	  ) );
+	  );
+	  sellerDao.insert( wrongfulSeller );
 
-	  Seller wrongfulSeller = sellerDao.findByEmail( "wrongful_email@gmail.com" );
 	  System.out.println( wrongfulSeller );
 
 	  sellerDao.deleteById( wrongfulSeller.getId() );

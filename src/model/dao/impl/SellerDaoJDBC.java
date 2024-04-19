@@ -21,12 +21,13 @@ public class SellerDaoJDBC implements SellerDao {
   @Override
   public void insert(Seller obj) {
 	PreparedStatement pst = null;
+	ResultSet rs = null;
 
 	try {
 	  String query = "INSERT INTO seller (Name, Email, BirthDate, BaseSalary, DepartmentId)" +
 			  "VALUES (?, ?, ? ,?, ?)";
 
-	  pst = this.conn.prepareStatement( query );
+	  pst = this.conn.prepareStatement( query, Statement.RETURN_GENERATED_KEYS );
 
 	  pst.setString( 1, obj.getName() );
 	  pst.setString( 2, obj.getEmail() );
@@ -39,11 +40,20 @@ public class SellerDaoJDBC implements SellerDao {
 	  pst.setDouble( 4, obj.getBaseSalary() );
 	  pst.setInt( 5, obj.getDepartment().getId() );
 
-	  pst.executeUpdate();
+	  int affectedRows = pst.executeUpdate();
+
+	  if ( affectedRows > 0 ) {
+		rs = pst.getGeneratedKeys();
+		rs.next();
+		obj.setId( rs.getInt( 1 ) );
+	  } else {
+		throw new DbException( "Unexpected error! No rows affected!" );
+	  }
 	} catch (SQLException e) {
 	  throw new DbException( e.getMessage() );
 	} finally {
 	  DB.closePreparedStatement( pst );
+	  DB.closeResultSet( rs );
 	}
   }
 
